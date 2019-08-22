@@ -6,37 +6,33 @@ import {
     Col,
     Nav,
     Navbar,
-    NavDropdown,
     Form,
     FormControl,
     Button,
     Card,
 } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
+import {
+    BrowserRouter as Router,
+    Route,
+    Link,
+} from "react-router-dom";
 
 
 class Header extends React.Component {
     render() {
         return (
             <Navbar bg="light" expand="lg">
-                <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+                <Navbar.Brand as={Link} to="/">Jiajun的编程随想</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="mr-auto">
-                        <Nav.Link href="#home">Home</Nav.Link>
-                        <Nav.Link href="#link">Link</Nav.Link>
-                        <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                            <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                            <NavDropdown.Divider />
-                            <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-                        </NavDropdown>
-                    </Nav>
-                    <Form inline>
-                        <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-                        <Button variant="outline-success">Search</Button>
+                    <Form inline className="mr-auto">
+                        <FormControl type="text" placeholder="搜索" className="mr-sm-2" />
+                        <Button variant="outline-success">搜索</Button>
                     </Form>
+                    <Nav className="ml-auto">
+                        <Nav.Link as={Link} to="/aboutme">关于我</Nav.Link>
+                    </Nav>
                 </Navbar.Collapse>
             </Navbar>
         )
@@ -46,7 +42,7 @@ class Header extends React.Component {
 class Content extends React.Component {
     render() {
         return (
-            <p>content</p>
+            <p>{this.props.content}</p>
         )
     }
 }
@@ -54,18 +50,13 @@ class Content extends React.Component {
 class Sidebar extends React.Component {
     render() {
         return (
-            <Card style={{ width: '18rem' }}>
-                <Card.Img variant="top" src="holder.js/100px180" />
+            <Card>
+                <Card.Img variant="top" src="./mp.jpg" />
                 <Card.Body>
-                    <Card.Title>Card Title</Card.Title>
-                    <Card.Text>
-                        Some quick example text to build on the card title and make up the bulk of
-                        the card's content.
-                    </Card.Text>
-                    <Button variant="primary">Go somewhere</Button>
+                    <Card.Title>微信公众号</Card.Title>
                 </Card.Body>
             </Card>
-        )
+            )
     }
 }
 
@@ -75,7 +66,7 @@ class Body extends React.Component {
             <Container>
                 <Row>
                     <Col sm={8}>
-                        <Content />
+                        <Content content={this.props.content} />
                     </Col>
                     <Col sm={4}>
                         <Sidebar />
@@ -97,19 +88,47 @@ class Footer extends React.Component {
                     </p>
                 </span>
             </footer>
-            )
+        )
+    }
+}
+
+
+class Index extends React.Component {
+    render() {
+        return (
+                <Container>
+                    <Header />
+                    <Body content="index"/>
+                    <Footer />
+                </Container>
+        )
+    }
+}
+
+class About extends React.Component {
+    render() {
+        return (
+                <Container>
+                    <Header />
+                    <Body content="about"/>
+                    <Footer />
+                </Container>
+        )
     }
 }
 
 
 class Blog extends React.Component {
+    componentDidMount() {
+        document.title = "Jiajun的编程随想";
+    }
+
     render() {
         return (
-            <Container>
-                <Header />
-                <Body />
-                <Footer />
-            </Container>
+            <Router>
+                <Route path="/" exact component={Index} />
+                <Route path="/aboutme" component={About} />
+            </Router>
         )
     }
 }
